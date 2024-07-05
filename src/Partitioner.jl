@@ -3,7 +3,8 @@ module Partitioner
 using Distances: pairwise
 using Distances: Euclidean
 
-using LinearAlgebra: issymmetric, eigvals
+using LinearAlgebra: issymmetric, eigen, eigvals
+using LinearAlgebra: Diagonal
 
 export !
 
@@ -16,11 +17,24 @@ function build_edm(locations, locations_by_row=true)
     return pairwise(Euclidean(), locations; dims=2)
 end
 
+# takes a matrix, and then return a new ones where every 
+# element is given by the row and column sum of original
+function aggregated_matrix(mat::Matrix{T}) where {T<:Real}
+    nr, nc = size(mat)
+    col_sum = repeat(sum(mat; dims=1), nr, 1)
+    row_sum = repeat(sum(mat; dims=2), 1, nc)
+    return col_sum + row_sum
+end
+
 # Returns the grammian of a given matrix
-function grammian(edm::Matrix{T}) where {T<:Real}
+function grammian(edm::Matrix{T}; centered=false) where {T<:Real}
     n, _ = size(edm)
     magnitudes = edm[1, :] * ones(T, n)'
-    return magnitudes + magnitudes' - edm
+    gramm = (magnitudes + magnitudes' - edm) ./ 2
+    if !centered
+        return gramm
+    end
+    return gramm - 1 / n .* aggregated_matrix(gramm) .+ 1 / n^2 * sum(gramm)
 end
 
 # Check if given matrix is a valid EDM
@@ -47,6 +61,16 @@ function isedm(edm::Matrix{T})::Bool where {T<:Real}
 
     # Must be an edm
     return true
+end
+
+# Takes a distance matrix and returns a set of locations whose
+# sqaured distances matches the given matrix
+function euclid_embed(edm::Matrix{T}; centered=false) where {T<:Real}
+    gramm = grammian(edm; centered=centered)
+    vals, vecs = eigen(gramm)
+    # hate this, need to check up to a tolerance!!!
+    loc = vecs * Diagonal(sqrt.(max.(vals, 0)))
+    return loc
 end
 
 end

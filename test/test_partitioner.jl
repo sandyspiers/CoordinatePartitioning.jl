@@ -1,4 +1,5 @@
-using CoordinatePartitioning.Partitioner: build_edm, grammian, isedm
+using CoordinatePartitioning.Partitioner:
+    build_edm, grammian, isedm, aggregated_matrix, euclid_embed
 using Test
 
 @testset "Partitioner.jl" begin
@@ -21,6 +22,23 @@ using Test
             @test !isedm(bad_edm)
             bad_edm += bad_edm'
             @test !isedm(bad_edm)
+        end
+        # test aggregated matrix
+        @test aggregated_matrix([1 2 2; 3 1 2]) == [9 8 9; 10 9 10]
+        # test noncentered euclidean embeddings
+        for k in 1:5
+            edm = build_edm(rand(10, 2) .* 100)
+            @test isedm(edm)
+            # start with noncentered
+            new_loc = euclid_embed(edm)
+            new_edm = build_edm(new_loc) .^ 2
+            diff = maximum(abs.(edm - new_edm))
+            @test diff < 1e-10
+            # now check centererd
+            new_loc = euclid_embed(edm; centered=true)
+            new_edm = build_edm(new_loc) .^ 2
+            diff = maximum(abs.(edm - new_edm))
+            @test diff < 1e-10
         end
     end
 end
