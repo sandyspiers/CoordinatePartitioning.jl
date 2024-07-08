@@ -66,6 +66,13 @@ function isedm(edm::Matrix{T})::Bool where {T<:Real}
     return true
 end
 
+# Conduct eigenval decomposition, remove evals below FLOAT_TOL
+function nonzero_eigen(mat::Matrix{T}, tol::Real=FLOAT_TOL) where {T<:Real}
+    vals, vecs = eigen(mat)
+    non_zero_evals = abs.(vals) .>= tol
+    return vals[non_zero_evals], vecs[:, non_zero_evals]
+end
+
 # Takes a distance matrix and returns a set of locations whose
 # sqaured distances matches the given matrix
 function euclid_embed(edm::Matrix{T}; centered=false) where {T<:Real}
