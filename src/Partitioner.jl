@@ -10,6 +10,8 @@ using ..CoordinatePartitioning: FLOAT_TOL
 
 export !
 
+const STRATEGIES = ["random", "all"]
+
 # Build an edm base on set of locations
 # By default, each row is a location
 function build_edm(locations, locations_by_row=true)

@@ -1,4 +1,5 @@
 using CoordinatePartitioning: FLOAT_TOL
+using CoordinatePartitioning.Partitioner: STRATEGIES
 using CoordinatePartitioning.Partitioner:
     build_edm,
     grammian,
@@ -61,7 +62,7 @@ using Test
         edm = build_edm(loc)
         new_loc, evals = euclid_embed(edm; centered=true)
         coords = size(new_loc)[2]
-        for strat in ["random", "all"]
+        for strat in STRATEGIES
             for num_par in 1:10
                 par = partition(evals, num_par; strategy=strat)
                 @test ispartition(par, coords)
