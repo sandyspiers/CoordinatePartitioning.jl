@@ -10,7 +10,7 @@ using ..CoordinatePartitioning: FLOAT_TOL
 
 export !
 
-const STRATEGIES = ["random", "all"]
+const STRATEGIES = ["random"]
 
 # Build an edm base on set of locations
 # By default, each row is a location
@@ -134,9 +134,6 @@ function partition(evals::Vector{T}, num::Int; strategy::String="all") where {T<
             end
         end
         return partitions
-    end
-    if strategy == "all"
-        return 1:coords
     end
     throw(ArgumentError("$strategy is not a valid partition strategy"))
 end
