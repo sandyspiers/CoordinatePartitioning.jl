@@ -77,14 +77,18 @@ end
 # sqaured distances matches the given matrix
 function euclid_embed(edm::Matrix{T}; centered=false) where {T<:Real}
     gramm = grammian(edm; centered=centered)
-    vals, vecs = eigen(gramm)
-    # get nonzero evals (coordinates)
-    non_zero_evals = abs.(vals) .>= FLOAT_TOL
-    @info non_zero_evals
-    vals = vals[non_zero_evals]
-    vecs = vecs[:, non_zero_evals]
+    # conduct nonzero eigenvalue decomposition
+    vals, vecs = nonzero_eigen(gramm)
+    # check that its PSD (otherwise raise error)
+    if minimum(vals) < -FLOAT_TOL
+        throw(DomainError("The EDM provided is not valid (Grammian not PSD)!"))
+    end
     # recreate and return
-    loc = vecs * Diagonal(sqrt.(max.(vals, 0)))
+    loc = vecs * Diagonal(sqrt.(vals))
+    # if cenetered, assume they wants the evals as well
+    if centered
+        return loc, vals
+    end
     return loc
 end
 
