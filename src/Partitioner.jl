@@ -1,5 +1,6 @@
 module Partitioner
 
+using Base: findlastnot, nonnothingtype_checked
 using Distances: pairwise
 using Distances: Euclidean
 
@@ -70,7 +71,12 @@ end
 function euclid_embed(edm::Matrix{T}; centered=false) where {T<:Real}
     gramm = grammian(edm; centered=centered)
     vals, vecs = eigen(gramm)
-    # hate this, need to check up to a tolerance!!!
+    # get nonzero evals (coordinates)
+    non_zero_evals = abs.(vals) .>= FLOAT_TOL
+    @info non_zero_evals
+    vals = vals[non_zero_evals]
+    vecs = vecs[:, non_zero_evals]
+    # recreate and return
     loc = vecs * Diagonal(sqrt.(max.(vals, 0)))
     return loc
 end
