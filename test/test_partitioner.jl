@@ -70,6 +70,7 @@ using Test
                     @test length(par) <= num_par
                 end
                 partitioned_edms = build_edms(new_loc, par)
+                @test first(size(partitioned_edms)) == length(par)
                 aggregated_edms = first(sum(partitioned_edms; dims=1))
                 @test maximum(abs.(edm - aggregated_edms)) <= FLOAT_TOL
             end
