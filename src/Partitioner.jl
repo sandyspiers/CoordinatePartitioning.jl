@@ -6,6 +6,8 @@ using Distances: Euclidean
 using LinearAlgebra: issymmetric, eigen, eigvals
 using LinearAlgebra: Diagonal
 
+using ..CoordinatePartitioning: FLOAT_TOL
+
 export !
 
 # Build an edm base on set of locations

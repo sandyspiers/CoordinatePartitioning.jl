@@ -1,6 +1,9 @@
 module CoordinatePartitioning
 
-# Write your package code here.
+# Constants
+const FLOAT_TOL = 1e-10
+
+# Imports
 include("Partitioner.jl")
 export Partitioner
 

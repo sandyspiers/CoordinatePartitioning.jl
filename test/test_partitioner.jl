@@ -1,3 +1,4 @@
+using CoordinatePartitioning: FLOAT_TOL
 using CoordinatePartitioning.Partitioner:
     build_edm, grammian, isedm, aggregated_matrix, euclid_embed
 using Test
@@ -33,12 +34,13 @@ using Test
             new_loc = euclid_embed(edm)
             new_edm = build_edm(new_loc) .^ 2
             diff = maximum(abs.(edm - new_edm))
-            @test diff < 1e-10
+            @test diff < FLOAT_TOL
+
             # now check centererd
             new_loc = euclid_embed(edm; centered=true)
             new_edm = build_edm(new_loc) .^ 2
             diff = maximum(abs.(edm - new_edm))
-            @test diff < 1e-10
+            @test diff < FLOAT_TOL
         end
     end
 end
