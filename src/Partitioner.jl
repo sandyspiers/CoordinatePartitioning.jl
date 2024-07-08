@@ -1,6 +1,5 @@
 module Partitioner
 
-using Base: findlastnot, nonnothingtype_checked
 using Distances: pairwise
 using Distances: Euclidean
 
@@ -14,6 +13,9 @@ export !
 # Build an edm base on set of locations
 # By default, each row is a location
 function build_edm(locations, locations_by_row=true)
+    if ndims(locations) <= 1
+        return pairwise(Euclidean(), locations)
+    end
     if locations_by_row
         return pairwise(Euclidean(), locations; dims=1)
     end
@@ -90,6 +92,56 @@ function euclid_embed(edm::Matrix{T}; centered=false) where {T<:Real}
         return loc, vals
     end
     return loc
+end
+
+# Remove a given item from a collention
+function remove!(collection, item)
+    return deleteat!(collection, findfirst(isequal(item), collection))
+end
+
+# Checks that a partition set is valid
+function ispartition(partitions, elements::Int)
+    remaining_elements = collect(1:elements)
+    for element in vcat(partitions...)
+        try
+            remove!(remaining_elements, element)
+        catch
+            return false
+        end
+    end
+    if length(remaining_elements) != 0
+        return false
+    end
+    return true
+end
+
+# Return a partition set determined by evals and with a given strategy
+function partition(evals::Vector{T}, num::Int; strategy::String="all") where {T<:Real}
+    # TODO: Provide other strategies
+    coords = length(evals)
+    if strategy == "random"
+        remaining = collect(1:coords)
+        poprand!() = popat!(remaining, rand(1:length(remaining)))
+        partitions = [[poprand!()] for _ in 1:min(num, coords)]
+        p = 1
+        while length(remaining) > 0
+            push!(partitions[p], poprand!())
+            p += 1
+            if p > length(partitions)
+                p = 1
+            end
+        end
+        return partitions
+    end
+    if strategy == "all"
+        return 1:coords
+    end
+    throw(ArgumentError("$strategy is not a valid partition strategy"))
+end
+
+# takes the provided partition set, and returns a set a squared EDMs
+function build_edms(locations::Matrix{T}, partition) where {T<:Real}
+    return [build_edm(locations[:, par]) .^ 2 for par in partition]
 end
 
 end
