@@ -3,6 +3,8 @@
     locations = [0 1; 0 3]
     edm = build_edm(locations)
     @test edm == [0 2; 2 0]
+    # test random edm
+    @test isedm(rand_edm(10, 2))
     # test edmvalid
     for k in 1:5
         locations = rand(10, 2) .* 100

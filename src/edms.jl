@@ -16,6 +16,16 @@ function build_edm(locations; locations_by_row=true)
 end
 
 """
+    rand_edm(num::Integer, coords::Integer; axis_limit::Integer=100)
+
+Returns a random EDM of a given number of coordinates.
+"""
+function rand_edm(num::Integer, coords::Integer; axis_limit::Integer=100)
+    locations = rand(num, coords) .* axis_limit
+    return build_edm(locations)
+end
+
+"""
     grammian(edm::Matrix{T}; centered=false) where {T<:Real}
 
 Returns the Gram matrix of the provided Euclidean distance matrix (EDM).

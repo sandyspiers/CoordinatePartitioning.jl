@@ -3,6 +3,7 @@ using CoordinatePartitioning:
     STRATEGIES,
     build_edm,
     build_edms,
+    rand_edm,
     euclid_embed,
     grammian,
     isedm,
