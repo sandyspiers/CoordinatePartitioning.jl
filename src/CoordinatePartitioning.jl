@@ -9,7 +9,7 @@ using LinearAlgebra: Diagonal
 
 using JuMP: Model as JumpModel
 using JuMP: MOI
-using JuMP: @variable, @constraint, @build_constraint
+using JuMP: @variable, @constraint, @build_constraint, @objective
 using JuMP: VariableRef
 using JuMP: callback_value, callback_node_status, set_attribute
 

@@ -34,6 +34,7 @@ function construct(
     # add epigraph variables
     s = length(edms)
     @variable(model, epigraphs[1:s] >= 0)
+    @objective(model, Max, sum(epigraphs))
     # add tangent callback
     _cb(cb_data) = tangent_callback(model, edms, location_vars, epigraphs, cb_data)
     set_attribute(model, MOI.LazyConstraintCallback(), _cb)
