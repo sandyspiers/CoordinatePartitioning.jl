@@ -10,10 +10,13 @@ using CoordinatePartitioning:
     partition,
     rand_edm,
     solve
+
 using GLPK
+
 using JuMP: Model as JumpModel
 using JuMP: @variable, @constraint, @objective
 using JuMP: objective_value, optimize!
+
 using Test
 
 include("test_edms.jl")

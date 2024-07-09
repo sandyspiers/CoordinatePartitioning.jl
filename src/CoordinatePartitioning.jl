@@ -1,6 +1,6 @@
 module CoordinatePartitioning
 
-# 
+# imports
 using Distances: pairwise
 using Distances: Euclidean
 
