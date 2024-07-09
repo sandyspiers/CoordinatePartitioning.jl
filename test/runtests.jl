@@ -1,5 +1,4 @@
 using CoordinatePartitioning:
-    FLOAT_TOL,
     STRATEGIES,
     build_edm,
     build_edms,

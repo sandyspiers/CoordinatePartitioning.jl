@@ -27,13 +27,11 @@
         # start with noncentered
         new_loc = euclid_embed(edm)
         new_edm = build_edm(new_loc) .^ 2
-        diff = maximum(abs.(edm - new_edm))
-        @test diff < FLOAT_TOL
+        @test edm ≈ new_edm
 
         # now check centererd
         new_loc, _ = euclid_embed(edm; centered=true)
         new_edm = build_edm(new_loc) .^ 2
-        diff = maximum(abs.(edm - new_edm))
-        @test diff < FLOAT_TOL
+        @test edm ≈ new_edm
     end
 end
