@@ -23,7 +23,7 @@ function ispartition(partitions, elements::Integer)::Bool
 end
 
 # Return a partition set determined by evals and with a given strategy
-function partition(evals::Vector{T} where {T<:Real}, num::Integer; strategy::String="all")
+function partition(evals::Vector{T} where {T<:Real}, num::Integer, strategy::String="all")
     # TODO: Provide other strategies
     coords = length(evals)
     if strategy == "random"

@@ -10,7 +10,7 @@
     coords = size(new_loc)[2]
     for strat in STRATEGIES
         for num_par in 1:10
-            par = partition(evals, num_par; strategy=strat)
+            par = partition(evals, num_par, strat)
             @test ispartition(par, coords)
             if strat != "all"
                 @test length(par) <= num_par
