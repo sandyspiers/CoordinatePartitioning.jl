@@ -31,6 +31,9 @@ function construct(
     # add variables and cardinality constraint
     @variable(model, 0 <= location_vars[1:n] <= 1, Bin)
     @constraint(model, sum(location_vars) == cardinality)
+    if cardinality <= 1
+        return model
+    end
     # add epigraph variables
     s = length(edms)
     @variable(model, 0 <= epigraphs[c=1:s] <= sum(edms[c]))
