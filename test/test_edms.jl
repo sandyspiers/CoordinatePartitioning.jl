@@ -1,4 +1,4 @@
-@testset "EDM tests" begin
+@testset "edms.jl" begin
     # test build edm
     locations = [0 1; 0 3]
     edm = build_edm(locations)
