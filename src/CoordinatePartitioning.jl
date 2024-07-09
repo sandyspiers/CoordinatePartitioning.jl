@@ -29,6 +29,20 @@ include("partitioner.jl")
 # # main solver rountine
 include("modeler.jl")
 
+"""
+    solve(
+    edm::Matrix{T} where {T<:Real},
+    cardinality::Integer,
+    strategy::String,
+    num::Integer,
+    optimizer::Module,
+)
+
+The main public solve routine.
+Takes a Euclidean distance matrics, given cardinality,
+partition strategy and desired number of partitions
+and solves the problem using the given optimizer package
+"""
 function solve(
     edm::Matrix{T} where {T<:Real},
     cardinality::Integer,
