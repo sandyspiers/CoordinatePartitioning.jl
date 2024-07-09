@@ -7,6 +7,12 @@ using Distances: Euclidean
 using LinearAlgebra: eigen, eigvals
 using LinearAlgebra: Diagonal
 
+using JuMP: Model as JumpModel
+using JuMP: MOI
+using JuMP: @variable, @constraint, @build_constraint
+using JuMP: VariableRef
+using JuMP: callback_value, callback_node_status, set_attribute
+
 # Constants
 const FLOAT_TOL = 1e-10
 const STRATEGIES = ["random"]
@@ -19,5 +25,14 @@ include("edms.jl")
 
 # # partitioner functions and strategies
 include("partitioner.jl")
+
+# # main solver rountine
+include("modeler.jl")
+
+function solve(
+    edm::Matrix{T} where {T<:Real}, cardinality::Integer, strategy::String, num::Integer
+)
+    return nothing
+end
 
 end
