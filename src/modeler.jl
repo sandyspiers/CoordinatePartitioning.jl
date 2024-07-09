@@ -33,7 +33,7 @@ function construct(
     @constraint(model, sum(location_vars) == cardinality)
     # add epigraph variables
     s = length(edms)
-    @variable(model, epigraphs[1:s] >= 0)
+    @variable(model, 0 <= epigraphs[c=1:s] <= sum(edms[c]))
     @objective(model, Max, sum(epigraphs))
     # add tangent callback
     _cb(cb_data) = tangent_callback(model, edms, location_vars, epigraphs, cb_data)
