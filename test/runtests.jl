@@ -3,12 +3,16 @@ using CoordinatePartitioning:
     STRATEGIES,
     build_edm,
     build_edms,
-    rand_edm,
+    construct,
     euclid_embed,
     grammian,
     isedm,
     ispartition,
-    partition
+    partition,
+    rand_edm,
+    solve
+using GLPK
+using JuMP: objective_value, optimize!
 using Test
 
 include("test_edms.jl")
