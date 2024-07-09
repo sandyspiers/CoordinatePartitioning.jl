@@ -1,10 +1,8 @@
-using CoordinatePartitioning: FLOAT_TOL
-using CoordinatePartitioning.Partitioner: STRATEGIES
-using CoordinatePartitioning.Partitioner:
+using CoordinatePartitioning: FLOAT_TOL, STRATEGIES
+using CoordinatePartitioning:
     build_edm,
     grammian,
     isedm,
-    aggregated_matrix,
     euclid_embed,
     ispartition,
     partition,
@@ -32,8 +30,6 @@ using Test
             bad_edm += bad_edm'
             @test !isedm(bad_edm)
         end
-        # test aggregated matrix
-        @test aggregated_matrix([1 2 2; 3 1 2]) == [9 8 9; 10 9 10]
         # test noncentered euclidean embeddings
         for k in 1:5
             edm = build_edm(rand(10, 2) .* 100)
