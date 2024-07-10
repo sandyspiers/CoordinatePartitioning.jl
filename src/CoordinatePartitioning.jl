@@ -1,5 +1,16 @@
 module CoordinatePartitioning
 
+# exports
+# the main export is the solve routine, which solves
+# a completly defined euclidean max sum diversity problem
+export solve
+# we also export all avaliable partition strategies
+export STRATEGIES
+# for those wanting to solve the problem on their own,
+# the following exports will allow this, and are written
+# in the steps that should be followed.
+export build_edm, euclid_embed, partition, build_edms, construct
+
 # imports
 using Distances: pairwise
 using Distances: Euclidean
