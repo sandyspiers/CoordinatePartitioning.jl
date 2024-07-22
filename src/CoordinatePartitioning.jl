@@ -28,7 +28,7 @@ using JuMP: callback_value, callback_node_status, set_attribute, optimize!, obje
 
 # Constants
 const FLOAT_TOL = 1e-10
-const STRATEGIES = ["random", "greedy", "stratified", "stepped"]
+const STRATEGIES = ["random", "greedy", "stratified", "stepped", "total", "none"]
 
 # # generic utility functions
 include("utils.jl")

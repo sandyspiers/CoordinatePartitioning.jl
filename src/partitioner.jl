@@ -51,6 +51,10 @@ function partition(evals::Vector{T} where {T<:Real}, bins::Integer, strategy::St
             end
         end
         return partitions
+    elseif strategy == "total"
+        return [[c] for c in 1:coords]
+    elseif strategy == "none"
+        return [collect(1:coords)]
     end
     throw(ArgumentError("$strategy is not a valid partition strategy"))
 end
