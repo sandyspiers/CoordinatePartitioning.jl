@@ -18,6 +18,8 @@ using Distances: Euclidean
 using LinearAlgebra: eigen, eigvals
 using LinearAlgebra: Diagonal
 
+using Random: shuffle
+
 using JuMP: Model as JumpModel
 using JuMP: MOI
 using JuMP: @variable, @constraint, @build_constraint, @objective

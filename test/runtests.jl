@@ -7,11 +7,14 @@ using CoordinatePartitioning:
     grammian,
     isedm,
     ispartition,
+    evenish_partition,
     partition,
     rand_edm,
     solve
 
 using GLPK
+
+using Random: shuffle
 
 using JuMP: Model as JumpModel
 using JuMP: @variable, @constraint, @objective

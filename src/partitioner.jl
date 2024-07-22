@@ -43,6 +43,16 @@ function partition(evals::Vector{T} where {T<:Real}, num::Integer, strategy::Str
     throw(ArgumentError("$strategy is not a valid partition strategy"))
 end
 
+# creates evenish partitions preserving order
+function evenish_partition(collection, bins)
+    num = length(collection)
+    s = Int(floor(num / bins))
+    r = num % bins
+    p1 = s + 1 == 0 ? [] : Iterators.partition(collection[1:(r * (s + 1))], s + 1)
+    p2 = s == 0 ? [] : Iterators.partition(collection[(r * (s + 1) + 1):end], s)
+    return vcat(collect(p1), collect(p2))
+end
+
 """
     build_edms(locations::Matrix{T}, partition) where {T<:Real}
 

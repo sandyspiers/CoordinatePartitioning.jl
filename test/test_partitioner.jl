@@ -3,6 +3,12 @@
     @test ispartition([1, [2, 4], [3], [5, 6, 7]], 7)
     @test !ispartition([1, [2, 4], [5, 6, 7]], 7)
     @test !ispartition([1, [2, 4], [4], [5, 6, 7]], 7)
+    # check evenish partitioner
+    for n in 5:10
+        for b in 1:10
+            @test ispartition(evenish_partition(shuffle(1:n), b), n)
+        end
+    end
     # check partition strategies
     loc = rand(10, 2) .* 100
     edm = build_edm(loc)
