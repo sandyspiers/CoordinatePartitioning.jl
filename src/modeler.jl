@@ -7,9 +7,7 @@ Takes a Euclidean distance matrices, a given cardinality,
 a user provided optimizer and returns a diversity problem JuMP model
 with outer approximate-type tangent callbacks
 """
-function construct(
-    edms::Matrix{T} where {T<:Real}, cardinality::Integer, optimizer::Module
-)::JumpModel
+function construct(edms::Matrix{T} where {T<:Real}, cardinality::Integer, optimizer::Module)
     return construct([edms], cardinality, optimizer)
 end
 
@@ -23,8 +21,8 @@ a user provided optimizer and returns a diversity problem JuMP model
 with outer approximate-type tangent callbacks
 """
 function construct(
-    edms::Vector{Matrix{T}}, cardinality::Integer, optimizer::Module
-)::JumpModel where {T<:Real}
+    edms::Vector{Matrix{T}} where {T<:Real}, cardinality::Integer, optimizer::Module
+)
     # instantiate the model
     n = size(edms[1])[1]
     model = JumpModel(optimizer.Optimizer)
@@ -39,10 +37,13 @@ function construct(
     @variable(model, 0 <= epigraphs[c=1:s] <= sum(edms[c]))
     @objective(model, Max, sum(epigraphs))
     # add tangent callback
-    _cb(cb_data) = tangent_callback(model, edms, location_vars, epigraphs, cb_data)
+    num_cuts = Ref(0)
+    function _cb(cb_data)
+        return tangent_callback(model, edms, location_vars, epigraphs, num_cuts, cb_data)
+    end
     set_attribute(model, MOI.LazyConstraintCallback(), _cb)
     # return the model
-    return model
+    return model, num_cuts
 end
 
 function tangent_callback(
@@ -50,6 +51,7 @@ function tangent_callback(
     edms::Vector{Matrix{T}} where {T},
     x::Vector{VariableRef},
     epigraphs::Vector{VariableRef},
+    num_cuts::Ref{Int},
     callback_data,
 )
     if callback_node_status(callback_data, model) != MOI.CALLBACK_NODE_STATUS_INTEGER
@@ -63,6 +65,7 @@ function tangent_callback(
         if epi_val > fy + FLOAT_TOL
             cut = @build_constraint(epigraphs[s] <= -fy + dfy' * x)
             MOI.submit(model, MOI.LazyConstraint(callback_data), cut)
+            num_cuts[] += 1
         end
     end
     return nothing

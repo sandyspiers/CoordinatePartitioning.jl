@@ -26,7 +26,9 @@ end
     obj_val = glover_solve(edm, p, GLPK)
     for strat in STRATEGIES
         for par in 1:n
-            @test solve(edm, p, strat, par, GLPK) ≈ obj_val
+            val, ncut = solve(edm, p, strat, par, GLPK)
+            @test val ≈ obj_val
+            @test ncut > 0
         end
     end
 end

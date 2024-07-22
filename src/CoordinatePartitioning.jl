@@ -66,9 +66,9 @@ function solve(
     new_loc, evals = euclid_embed(edm; centered=true)
     par = partition(evals, num, strategy)
     edms = build_edms(new_loc, par)
-    mdl = construct(edms, cardinality, optimizer)
+    mdl, num_cuts = construct(edms, cardinality, optimizer)
     optimize!(mdl)
-    return objective_value(mdl)
+    return objective_value(mdl), num_cuts[]
 end
 
 end
