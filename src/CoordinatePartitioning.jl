@@ -5,7 +5,7 @@ module CoordinatePartitioning
 # a completly defined euclidean max sum diversity problem
 export solve
 # we also export all avaliable partition strategies
-export STRATEGIES
+export STRATEGIES, STRATEGIES_ALL
 # for those wanting to solve the problem on their own,
 # the following exports will allow this, and are written
 # in the steps that should be followed.
@@ -28,7 +28,8 @@ using JuMP: callback_value, callback_node_status, set_attribute, optimize!, obje
 
 # Constants
 const FLOAT_TOL = 1e-10
-const STRATEGIES = ["random", "greedy", "stratified", "stepped", "total", "none"]
+const STRATEGIES = ["random", "greedy", "stratified", "stepped"]
+const STRATEGIES_ALL = vcat(STRATEGIES, ["total", "none"])
 
 # # generic utility functions
 include("utils.jl")

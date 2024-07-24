@@ -24,7 +24,7 @@ end
     n, s, p = 10, 2, 4
     edm = rand_edm(n, s)
     obj_val = glover_solve(edm, p, GLPK)
-    for strat in STRATEGIES
+    for strat in STRATEGIES_ALL
         for par in 1:n
             val, ncut = solve(edm, p, strat, par, GLPK)
             @test val ≈ obj_val

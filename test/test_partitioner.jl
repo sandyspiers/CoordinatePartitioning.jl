@@ -14,7 +14,7 @@
     edm = build_edm(loc)
     new_loc, evals = euclid_embed(edm; centered=true)
     coords = size(new_loc)[2]
-    for strat in STRATEGIES
+    for strat in STRATEGIES_ALL
         for num_par in 1:10
             par = partition(evals, num_par, strat)
             @test ispartition(par, coords)

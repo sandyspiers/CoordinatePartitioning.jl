@@ -1,5 +1,5 @@
 using CoordinatePartitioning:
-    STRATEGIES,
+    STRATEGIES_ALL,
     build_edm,
     build_edms,
     construct,
