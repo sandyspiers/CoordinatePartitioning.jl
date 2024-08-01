@@ -32,6 +32,7 @@
         # now check centererd
         new_loc, _ = euclid_embed(edm; centered=true)
         new_edm = build_edm(new_loc) .^ 2
+        @test isedm(new_edm)
         @test edm ≈ new_edm
 
         # check we can re embed
