@@ -89,7 +89,11 @@ function euclid_embed(edm::Matrix{T}; centered=false) where {T<:Real}
     vals, vecs = nonzero_eigen(gramm, FLOAT_TOL)
     # check that its PSD (otherwise raise error)
     if minimum(vals) < -FLOAT_TOL
-        throw(DomainError("The EDM provided is not valid (Grammian not PSD)!"))
+        throw(
+            DomainError(
+                "The EDM provided is not valid (Grammian not PSD, smallest eval is $(minimum(vals)) )!",
+            ),
+        )
     end
     # recreate and return
     loc = vecs * Diagonal(sqrt.(vals))
