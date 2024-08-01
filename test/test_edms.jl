@@ -33,5 +33,9 @@
         new_loc, _ = euclid_embed(edm; centered=true)
         new_edm = build_edm(new_loc) .^ 2
         @test edm ≈ new_edm
+
+        # check we can re embed
+        recovered_loc = re_embed(new_edm)
+        @test build_edm(recovered_loc) ≈ edm
     end
 end

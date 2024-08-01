@@ -10,6 +10,7 @@ using CoordinatePartitioning:
     evenish_partition,
     partition,
     rand_edm,
+    re_embed,
     solve
 
 using GLPK
