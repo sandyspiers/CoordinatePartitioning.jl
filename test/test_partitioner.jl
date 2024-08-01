@@ -10,7 +10,7 @@
         end
     end
     # check partition strategies
-    loc = rand(10, 2) .* 100
+    loc = rand(100, 2) .* 100
     edm = build_edm(loc)
     new_loc, evals = euclid_embed(edm; centered=true)
     coords = size(new_loc)[2]
@@ -22,6 +22,7 @@
                 @test length(par) <= num_par
             end
             partitioned_edms = build_edms(new_loc, par)
+            @test all(isedm.(partitioned_edms))
             @test first(size(partitioned_edms)) == length(par)
             aggregated_edms = first(sum(partitioned_edms; dims=1))
             @test edm ≈ aggregated_edms

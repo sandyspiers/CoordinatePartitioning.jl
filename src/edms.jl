@@ -55,20 +55,20 @@ function isedm(edm::Matrix{T})::Bool where {T<:Real}
     # check square
     n, n2 = size(edm)
     if n != n2
-        # @warn "EDM is not square!"
+        @warn "EDM is not square!"
         return false
     end
 
     # check symetry up to a tolerance
     if maximum(abs.(edm - edm')) > eps()
-        # @warn "EDM is not symmetric!"
+        @warn "EDM is not symmetric!"
         return false
     end
 
     # check PSD of grammian
     min_eval = minimum(eigvals(grammian(edm)))
-    if min_eval < -eps()
-        # @warn "Grammian is not PSD! Min eva: $min_eval"
+    if min_eval < -FLOAT_TOL
+        @warn "Grammian is not PSD! Min eva: $min_eval"
         return false
     end
 
@@ -89,10 +89,14 @@ function euclid_embed(edm::Matrix{T}; centered=false) where {T<:Real}
     vals, vecs = nonzero_eigen(gramm, FLOAT_TOL)
     # check that its PSD (otherwise raise error)
     if minimum(vals) < -FLOAT_TOL
-        @warn "The EDM provided is not valid (Grammian not PSD, smallest eval is $(minimum(vals)) )!"
+        throw(
+            DomainError(
+                "The EDM provided is not valid (Grammian not PSD, smallest eval is $(minimum(vals)) )!",
+            ),
+        )
     end
     # recreate and return
-    loc = vecs * Diagonal(sqrt.(max.(0, vals)))
+    loc = vecs * Diagonal(sqrt.(vals))
     # if cenetered, assume they wants the evals as well
     if centered
         return loc, vals

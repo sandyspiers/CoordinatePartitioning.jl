@@ -27,6 +27,7 @@
         # start with noncentered
         new_loc = euclid_embed(edm)
         new_edm = build_edm(new_loc) .^ 2
+        @test isedm(new_edm)
         @test edm ≈ new_edm
 
         # now check centererd
