@@ -103,15 +103,3 @@ function euclid_embed(edm::Matrix{T}; centered=false) where {T<:Real}
     end
     return loc
 end
-
-"""
-    re_embed(edm::Matrix{T}; centered=false) where {T<:Real}
-
-Takes a **squared** EDM and returns a set of locations whose **standard Euclidean distance**
-matches the distances of the original matrix.
-It therefore does the opposite of the above.
-If `centered=true` then also returns the eigenvalues (for use in PCA).
-"""
-function re_embed(edm::Matrix{T}; kwargs...) where {T<:Real}
-    return euclid_embed(edm .^ 2; kwargs...)
-end
