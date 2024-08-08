@@ -16,13 +16,32 @@ function build_edm(locations; locations_by_row=true)
 end
 
 """
+    rand_loc_cube(num::Integer, coords::Integer; axis_limit::Integer=100)
+
+Returns a random set of locations inside a hypercube
+"""
+function rand_loc_cube(num::Integer, coords::Integer; axis_limit::Integer=100)
+    return rand(num, coords) .* axis_limit
+end
+
+"""
+    rand_loc_ball(num::Integer, coords::Integer; axis_limit::Integer=100)
+
+Returns a random set of locations on the edge of a hyperball
+"""
+function rand_loc_ball(num::Integer, coords::Integer; axis_limit::Integer=100)
+    l = randn(num, coords)
+    n = repeat(norm.(eachrow(l)); inner=(1, coords))
+    return (l ./ n) .* (axis_limit / 2)
+end
+
+"""
     rand_edm(num::Integer, coords::Integer; axis_limit::Integer=100)
 
 Returns a random EDM of a given number of coordinates.
 """
 function rand_edm(num::Integer, coords::Integer; axis_limit::Integer=100)
-    locations = rand(num, coords) .* axis_limit
-    return build_edm(locations)
+    return build_edm(rand_loc_cube(num, coords; axis_limit=axis_limit))
 end
 
 """
@@ -102,16 +121,4 @@ function euclid_embed(edm::Matrix{T}; centered=false) where {T<:Real}
         return loc, vals
     end
     return loc
-end
-
-"""
-    re_embed(edm::Matrix{T}; centered=false) where {T<:Real}
-
-Takes a **squared** EDM and returns a set of locations whose **standard Euclidean distance**
-matches the distances of the original matrix.
-It therefore does the opposite of the above.
-If `centered=true` then also returns the eigenvalues (for use in PCA).
-"""
-function re_embed(edm::Matrix{T}; kwargs...) where {T<:Real}
-    return euclid_embed(edm .^ 2; kwargs...)
 end
