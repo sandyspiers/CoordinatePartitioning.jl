@@ -23,14 +23,15 @@ function ispartition(partitions, elements::Integer)::Bool
 end
 
 # Return a partition set determined by evals and with a given strategy
-function partition(evals::Vector{T} where {T<:Real}, bins::Integer, strategy::String="all")
+function partition(evals::Vector{T} where {T<:Real}, bins::Integer, strategy=:all)
     coords = length(evals)
     bins = min(coords, bins)
-    if strategy == "random"
+    strategy = Symbol(strategy)
+    if strategy == :random
         return evenish_partition(shuffle(1:coords), bins)
-    elseif strategy == "greedy"
+    elseif strategy == :greedy
         return evenish_partition(1:coords, bins)
-    elseif strategy == "stratified"
+    elseif strategy == :stratified
         partitions = Vector[Int[] for _ in 1:bins]
         p = 1
         for c in 1:coords
@@ -38,7 +39,7 @@ function partition(evals::Vector{T} where {T<:Real}, bins::Integer, strategy::St
             p = p == bins ? 1 : p + 1
         end
         return partitions
-    elseif strategy == "stepped"
+    elseif strategy == :stepped
         partitions = Vector[Int[] for _ in 1:bins]
         p = 1
         explained = 0
@@ -51,9 +52,9 @@ function partition(evals::Vector{T} where {T<:Real}, bins::Integer, strategy::St
             end
         end
         return partitions
-    elseif strategy == "total"
+    elseif strategy == :total
         return [[c] for c in 1:coords]
-    elseif strategy == "none"
+    elseif strategy == :none
         return [collect(1:coords)]
     end
     throw(ArgumentError("$strategy is not a valid partition strategy"))

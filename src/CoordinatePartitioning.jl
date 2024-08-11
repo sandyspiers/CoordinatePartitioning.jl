@@ -28,8 +28,8 @@ using JuMP: callback_value, callback_node_status, set_attribute, optimize!, obje
 
 # Constants
 const FLOAT_TOL = 1e-10
-const STRATEGIES = ["random", "greedy", "stratified", "stepped"]
-const STRATEGIES_ALL = vcat(STRATEGIES, ["total", "none"])
+const STRATEGIES = [:random, :greedy, :stratified, :stepped]
+const STRATEGIES_ALL = vcat(STRATEGIES, [:total, :none])
 
 # # generic utility functions
 include("utils.jl")
@@ -60,7 +60,7 @@ and solves the problem using the given optimizer package
 function solve(
     edm::Matrix{T} where {T<:Real},
     cardinality::Integer,
-    strategy::String,
+    strategy,
     num::Integer,
     optimizer::Module,
 )

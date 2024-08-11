@@ -18,7 +18,7 @@
         for num_par in 1:10
             par = partition(evals, num_par, strat)
             @test ispartition(par, coords)
-            if strat != "total" && strat != "none"
+            if strat != :total && strat != :none
                 @test length(par) <= num_par
             end
             partitioned_edms = build_edms(new_loc, par)
