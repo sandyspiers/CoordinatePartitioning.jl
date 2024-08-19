@@ -15,7 +15,7 @@ export build_edm, euclid_embed, partition, build_edms, construct
 using Distances: pairwise
 using Distances: Euclidean
 
-using LinearAlgebra: eigen, eigvals
+using LinearAlgebra: eigen, eigvals, norm
 using LinearAlgebra: Diagonal
 
 using Random: shuffle
